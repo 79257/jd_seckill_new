@@ -91,7 +91,8 @@ class SpiderSession:
         :param cookie_file_name: 存放Cookie的文件名称
         :return:
         """
-        cookies_file = '{}{}.cookies'.format(self.cookies_dir_path, cookie_file_name)
+        cookies_file = '{}{}.cookies'.format(
+            self.cookies_dir_path, cookie_file_name)
         directory = os.path.dirname(cookies_file)
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -139,7 +140,8 @@ class QrLogin:
             'rid': str(int(time.time() * 1000)),
         }
         try:
-            resp = self.session.get(url=url, params=payload, allow_redirects=False)
+            resp = self.session.get(
+                url=url, params=payload, allow_redirects=False)
             if resp.status_code == requests.codes.OK:
                 return True
         except Exception as e:
@@ -205,7 +207,8 @@ class QrLogin:
 
         resp_json = parse_json(resp.text)
         if resp_json['code'] != 200:
-            logger.info('Code: %s, Message: %s', resp_json['code'], resp_json['msg'])
+            logger.info('Code: %s, Message: %s',
+                        resp_json['code'], resp_json['msg'])
             return None
         else:
             logger.info('已完成手机客户端确认')
@@ -411,7 +414,8 @@ class JdSeckill(object):
         while not resp.text.startswith("jQuery"):
             try_count = try_count - 1
             if try_count > 0:
-                resp = self.session.get(url=url, params=payload, headers=headers)
+                resp = self.session.get(
+                    url=url, params=payload, headers=headers)
             else:
                 break
             wait_some_time()
@@ -421,7 +425,8 @@ class JdSeckill(object):
 
     def get_sku_title(self):
         """获取商品名称"""
-        url = 'https://item.jd.com/{}.html'.format(global_config.getRaw('config', 'sku_id'))
+        url = 'https://item.jd.com/{}.html'.format(
+            global_config.getRaw('config', 'sku_id'))
         resp = self.session.get(url).content
         x_data = etree.HTML(resp)
         sku_title = x_data.xpath('/html/head/title/text()')
@@ -493,7 +498,8 @@ class JdSeckill(object):
             'Host': 'marathon.jd.com',
             'Referer': 'https://item.jd.com/{}.html'.format(self.sku_id),
         }
-        self.session.get(url=url, params=payload, headers=headers, allow_redirects=False)
+        self.session.get(url=url, params=payload,
+                         headers=headers, allow_redirects=False)
 
     def _get_seckill_init_info(self):
         """获取秒杀初始化信息（包括：地址，发票，token）
@@ -578,7 +584,8 @@ class JdSeckill(object):
             'skuId': self.sku_id,
         }
         try:
-            self.seckill_order_data[self.sku_id] = self._get_seckill_order_data()
+            self.seckill_order_data[self.sku_id] = self._get_seckill_order_data(
+            )
         except Exception as e:
             logger.info('抢购失败，无法获取生成订单的基本信息，接口返回:【{}】'.format(str(e)))
             return False
@@ -613,9 +620,11 @@ class JdSeckill(object):
             order_id = resp_json.get('orderId')
             total_money = resp_json.get('totalMoney')
             pay_url = 'https:' + resp_json.get('pcUrl')
-            logger.info('抢购成功，订单号:{}, 总价:{}, 电脑端付款链接:{}'.format(order_id, total_money, pay_url))
+            logger.info('抢购成功，订单号:{}, 总价:{}, 电脑端付款链接:{}'.format(
+                order_id, total_money, pay_url))
             if global_config.getRaw('messenger', 'enable') == 'true':
-                success_message = "抢购成功，订单号:{}, 总价:{}, 电脑端付款链接:{}".format(order_id, total_money, pay_url)
+                success_message = "抢购成功，订单号:{}, 总价:{}, 电脑端付款链接:{}".format(
+                    order_id, total_money, pay_url)
                 send_wechat(success_message)
             return True
         else:
