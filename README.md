@@ -128,6 +128,7 @@ $ zbarimg qr_code.png > qrcode.txt && qrencode -r qrcode.txt -o - -t UTF8 # 解�
 若两分钟还未抢购成功，基本上就是没抢到！程序暂时不支持自动停止，需要手动STOP！  
 
 ## 感谢
+* https://github.com/lvgithub/blog
 * https://github.com/huanghyw/jd_seckill
 * https://github.com/zhou-xiaojun/jd_mask 
 * https://github.com/wlwwu/jd_maotai 
